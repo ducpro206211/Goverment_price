@@ -11,12 +11,13 @@ def api():
     district = data['propertyBasicInfo']['address']['value']['district']
     landsize = data["propertyBasicInfo"]["landSize"]['value']
     city = data['propertyBasicInfo']['address']['value']['city']
-    for var in [district, landsize,type_house,city]:
+    if any(var is None for var in [landsize, type_house, district, city,street]):
+        return jsonify({'error': 'Input cannot be null.'})
     # Trả về JSON với thông báo lỗi
-     if var is None: 
-      return jsonify({'error 404': 'input cannot be null.'})
-     else : var = unidecode(var).lower()
-    if city != "ha noi":
+    decoded_city = unidecode(city).lower()
+    decoded_district = unidecode(district).lower()
+    decoded_street = unidecode(street).lower()
+    if decoded_city != ' ha noi':
         return jsonify({'error Api': 'this feature will update soon'})
     if type_house == 'townhouse':
       mask = (df['quận'] == district) & (df['tên đường'] == street)
@@ -88,7 +89,8 @@ def get_house_price():
     return jsonify({'house_price':house_price })
 
 if __name__ == '__main__':
-    app.run( )
+    app.run()
+
 
 
 
