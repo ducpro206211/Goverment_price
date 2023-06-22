@@ -1,7 +1,7 @@
 import pandas as pd
 from flask import Flask, request, jsonify
 from unidecode import unidecode
-df = pd.read_csv('/Users/oraichain/Downloads/Price_API/app/combined_data_nodiacritic.csv')
+df = pd.read_csv('combined_data_nodiacritic.csv')
 app = Flask(__name__)
 @app.route('/real_estate_price', methods=['POST'])
 def api():   
