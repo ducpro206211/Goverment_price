@@ -6,11 +6,11 @@ app = Flask(__name__)
 @app.route('/real_estate_price', methods=['POST'])
 def api():   
     data = request.get_json()     
-    type_house = data['propertyBasicInfo']['typeOfRealEstate']['value']
-    street = data['propertyBasicInfo']['address']['value']['street']
-    district = data['propertyBasicInfo']['address']['value']['district']
-    landsize = data["propertyBasicInfo"]["landSize"]['value']
-    city = data['propertyBasicInfo']['address']['value']['city']
+    type_house = ['type_house']
+    street = data['street']
+    district = data['district']
+    landsize = data['landsize']
+    city = data['city']
     if any(var is None for var in [landsize, type_house, district, city,street]):
         return jsonify({'error': 'Input cannot be null.'})
     # Trả về JSON với thông báo lỗi
@@ -38,10 +38,10 @@ def api():
 @app.route('/house_price', methods=['POST'])
 def get_house_price():
     data = request.get_json()
-    floor_info = data['houseInfo']['value']['numberOfFloors']
-    type_house = data['propertyBasicInfo']['typeOfRealEstate']['value']
-    landsize = data["propertyBasicInfo"]["landSize"]['value']
-    city = data['propertyBasicInfo']['address']['value']['city']
+    floor_info = data['floor_info']
+    type_house = ['type_house']
+    landsize = data['landsize']
+    city = data['city']
 
     if any(var is None for var in [landsize, type_house, floor_info, city]):
         return jsonify({'error': 'Input cannot be null.'})
