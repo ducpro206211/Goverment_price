@@ -9,16 +9,16 @@ def api():
     type_house = data['typeOfRealEstate']
     street = data['street']
     district = data['district']
-    landsize = data["landsize"]
+    landsize = data["landSize"]
     city = data['city']
     if any(var is None for var in [landsize, type_house, district, city,street]):
         return jsonify({'error': 'Input cannot be null.'})
     # Trả về JSON với thông báo lỗi
-    decoded_city = unidecode(city).lower()
-    decoded_district = unidecode(district).lower()
-    decoded_street = unidecode(street).lower()
-    if decoded_city != ' ha noi':
-        return jsonify({'error Api': 'this feature will update soon'})
+    decoded_city = unidecode(city).lower().strip().replace(" ", "")
+    decoded_district = unidecode(district).lower().strip()
+    decoded_street = unidecode(street).lower().strip()
+    if decoded_city != 'hanoi':
+        return jsonify({'Error': 'Real Estate Price outside Ha Noi city  will be update soon'})
     if type_house == 'townhouse':
       mask = (df['quận'] == decoded_district) & (df['tên đường'] == decoded_street)
       if mask.any():
@@ -27,7 +27,7 @@ def api():
       else:
         return jsonify({'real_estate_price': 0, 'district': district, 'street': street})
     elif type_house == 'apartment' or type_house == 'miniApartment':
-        return jsonify({'real_estate_price': 0, 'district': district, 'street': street})
+        return jsonify({'real_estate_price': 0, 'district': district, 'street': street,'Error':'Apartment have no '})
     else:
         mask = (df['quận'] == decoded_district) & (df['tên đường'] == decoded_street)
         if mask.any():
@@ -40,22 +40,22 @@ def get_house_price():
     data = request.get_json()
     floor_info = data['numberOfFloors']
     type_house = data['typeOfRealEstate']
-    landsize = data["landsize"]
+    landsize = data["landSize"]
     city = data['city']
 
     if any(var is None for var in [landsize, type_house, floor_info, city]):
         return jsonify({'error': 'Input cannot be null.'})
 
-    decoded_type_house = unidecode(type_house).lower()
-    decoded_city = unidecode(city).lower()
+    decoded_type_house = unidecode(type_house).lower().strip()
+    decoded_city = unidecode(city).lower().strip().replace(" ", "")
 
-    if decoded_city != " ha noi":
-        return jsonify({'error': 'This feature will be updated soon.'})
+    if decoded_city != "hanoi":
+        return jsonify({'Error': 'Real Estate Price outside Ha Noi city  will be update soon.'})
 
     def price_type(type_house, floor_info):
-        if type_house == 'fourLevelHouse' and floor_info > 1:
+        if type_house == 'fourlevelhouse' and floor_info > 1:
             return "Error: If fourLevelHouse and floor > 1, maybe your house is type oldStoreHouse"
-        if type_house in ['newhouse', 'townhouse', 'oldstorehouse','privateProperty','shophouse']:
+        if type_house in ['newhouse', 'townhouse', 'oldstorehouse','privateproperty','shophouse']:
             if floor_info == 1:
                 return  (2351000, 4569000)
             elif floor_info in [2, 3]:
@@ -64,7 +64,7 @@ def get_house_price():
                 return  (6122000, 7038000)
             elif floor_info in [6, 7, 8]:
                 return  6249000
-        elif type_house in ['apartment', 'miniapartment']:
+        elif type_house in ['apartment', 'minipartment']:
             if floor_info > 5:
                 return  (6704000, 7481000)
             else : return 'No apartment under 3 floor'
