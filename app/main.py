@@ -1,7 +1,18 @@
 import pandas as pd
-from flask import Flask, request, jsonify
 from unidecode import unidecode
+from flask import (
+    Flask,
+    make_response,
+    jsonify,
+    request,
+    send_file,
+    send_from_directory,
+    abort,
+)
 df = pd.read_csv('combined_data_nodiacritic.csv')
+from flask_cors import CORS
+app = Flask(__name__)
+CORS(app)
 app = Flask(__name__)
 @app.route('/real_estate_price', methods=['POST'])
 def api():   
@@ -87,8 +98,8 @@ def get_house_price():
         house_price = tuple(x * landsize for x in price)
 
     return jsonify({'house_price':house_price })
-if __name__ == '__main__':
-    app.run()
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=9000)
 
 
 
