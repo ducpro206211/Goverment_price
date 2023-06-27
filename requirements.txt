@@ -1,3 +1,5 @@
-flask
+Flask
+Flask-Cors
 pandas
 unidecode
+gevent
