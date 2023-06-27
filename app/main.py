@@ -13,7 +13,6 @@ df = pd.read_csv('combined_data_nodiacritic.csv')
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
-app = Flask(__name__)
 @app.route('/real_estate_price', methods=['POST'])
 def api():   
     data = request.get_json()     
